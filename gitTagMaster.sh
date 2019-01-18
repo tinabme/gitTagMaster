@@ -16,6 +16,26 @@
 #  - without repo arguments: ./gitTagMaster.sh v2.1.3
 ##########################################################################################
 
+# check if stdout is a terminal...
+if test -t 1; then
+    # see if it supports colors...
+    ncolors=$(tput colors)
+
+    if test -n "$ncolors" && test $ncolors -ge 8; then
+        bold="$(tput bold)"
+        underline="$(tput smul)"
+        standout="$(tput smso)"
+        normal="$(tput sgr0)"
+        black="$(tput setaf 0)"
+        red="$(tput setaf 1)"
+        green="$(tput setaf 2)"
+        yellow="$(tput setaf 3)"
+        blue="$(tput setaf 4)"
+        magenta="$(tput setaf 5)"
+        cyan="$(tput setaf 6)"
+        white="$(tput setaf 7)"
+    fi
+fi
 
 # verify that the tag argument is passed and the last argument starts with a v
 if [[ $# -gt 0 ]] && [[ ${!#} == v* ]]; then
@@ -40,8 +60,8 @@ if [[ $# -gt 0 ]] && [[ ${!#} == v* ]]; then
     fi
     STASHED=0
     echo    
-    echo ------------------------------------------------------------------------------------
-    echo "$var" 
+    echo $(tput setaf 7) ------------------------------------------------------------------------------------
+    echo $(tput setaf 5) $(tput bold) "$var" $(tput sgr0)
     cd "$var"
     
     #check to see if there are any changes and stash if needed
@@ -56,7 +76,7 @@ if [[ $# -gt 0 ]] && [[ ${!#} == v* ]]; then
 
     # check to see if the pull was clean
     if [[ `git status --porcelain` ]]; then
-      echo "Something is wrong cant tag" $(tput sgr0)
+      echo $(tput setaf 1) $(tput bold) "Something is wrong cant tag" $(tput sgr0)
     else
       git tag
       echo "tag $TAG"
@@ -78,6 +98,6 @@ if [[ $# -gt 0 ]] && [[ ${!#} == v* ]]; then
   done
 
 else
-  echo "Usage: script name, each repo separated by space, tag"
-  echo "example: ./gitTagMaster.sh mySiteUI_js mySiteLambda mySiteCLI v2.1.3"
+  echo $(tput setaf 1) $(tput bold) "Usage: script name, each repo separated by space, tag" $(tput sgr0)
+  echo $(tput setaf 1) $(tput bold) "example: ./gitTagMaster.sh mySiteUI_js mySiteLambda mySiteCLI v2.1.3" $(tput sgr0)
 fi
