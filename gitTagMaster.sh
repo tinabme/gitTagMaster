@@ -2,7 +2,7 @@
 
 ##########################################################################################
 # Script to simplify git tagging of multiple repos for release
-#
+# Author: Tina Barfield https://github.com/tinabme
 #
 # Usage: script name then each repo separated by space then tag 
 # Notes: 
@@ -78,7 +78,7 @@ if [[ $# -gt 0 ]] && [[ ${!#} == v* ]]; then
     if [[ `git status --porcelain` ]]; then
       echo $(tput setaf 1) $(tput bold) "Something is wrong cant tag" $(tput sgr0)
     else
-      git tag
+      git tag --sort=-version:refname | head -n 10 #list last 10 git tags
       echo "tag $TAG"
       git tag $TAG    # may want to do a test run with this commented out
       git push --tags # may want to do a test run with this commented out
